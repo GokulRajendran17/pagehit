@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Institute</title>
+<style>
+  :root { --primary:#7aa2ff; --primary-hover:#6b8cff; --accent:#5a6ff0; --text:#2c3e50; --bg-test:#e6f0ff; }
+  *{box-sizing:border-box;font-family:"Segoe UI",Arial,sans-serif;margin:0;padding:0;}
+  body{background:linear-gradient(135deg,#f3f6fb,#eef3ff);color:var(--text);}
+  .wrapper{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+  .topbar{background:linear-gradient(90deg,var(--primary-hover),var(--primary));color:white;padding:0 40px;}
+  .topbar .wrapper{height:58px;}
+  .logo{font-size:20px;font-weight:700;padding:8px 16px;background:linear-gradient(135deg,#fff,#d0e1ff);color:#34495e;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);cursor:pointer;transition:0.2s;}
+  .logo:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.2);}
+  .topbar nav a{color:rgba(255,255,255,0.9);margin-left:18px;text-decoration:none;font-weight:500;transition:0.2s;}
+  .topbar nav a:hover{color:#fff;}
+  .main-title{text-align:center;margin:40px 0;}
+  .main-title h1{font-size:48px;color:var(--accent);font-weight:700;}
+  .page{padding-bottom:80px;}
+  .main-layout{display:flex;gap:70px;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 40px;}
+  @media(max-width:900px){.main-layout{flex-direction:column;gap:40px;padding:0 20px;}}
+  .left-content{flex:2;}
+  .left-content h2{font-size:28px;margin-bottom:16px;color:#34495e;}
+  .subtitle{max-width:520px;color:#5f6f81;font-size:16px;margin-bottom:30px;}
+  .levels{display:flex;flex-direction:column;gap:16px;}
+  .level{background:linear-gradient(135deg,#fff,#f5f8ff);padding:20px;border-radius:12px;border-left:5px solid var(--primary);box-shadow:0 6px 14px rgba(122,162,255,0.15);transition:0.2s;cursor:pointer;position:relative;}
+  .level:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(122,162,255,0.25);}
+  .level.selected{border-left-color:var(--accent);background:linear-gradient(135deg,#eef3ff,#dce8ff);box-shadow:0 0 0 3px rgba(122,162,255,0.35),0 12px 26px rgba(122,162,255,0.3);}
+  .sub-levels{display:none;flex-direction:column;margin-top:10px;gap:10px;padding-left:20px;}
+  .sub-level{padding:10px;border-radius:8px;background:#f5f8ff;cursor:pointer;transition:0.2s;}
+  .sub-level:hover{background:#e0ebff;}
+  .login-box{flex:1;max-width:340px;background:linear-gradient(135deg,#f0f4ff,#d9e3ff);padding:30px;border-radius:14px;box-shadow:0 12px 28px rgba(122,162,255,0.3);transition:0.2s;}
+  .login-box:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(122,162,255,0.35);}
+  .login-box h2{text-align:center;color:var(--accent);margin-bottom:20px;}
+  .login-box input{width:100%;padding:13px;margin-bottom:16px;border-radius:8px;border:1px solid #aab8ff;font-size:15px;transition:0.2s;}
+  .login-box input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(122,162,255,0.25);}
+  .login-box button{width:100%;padding:13px;background:linear-gradient(90deg,var(--primary),var(--primary-hover));color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:0.2s;}
+  .login-box button:hover{transform:translateY(-1px);}
+  .register{text-align:center;margin-top:16px;font-size:14px;}
+  .register a{color:var(--primary);font-weight:500;text-decoration:none;}
+  .login-success{display:none;text-align:center;color:green;font-weight:bold;margin-top:10px;}
+  
+  /* Test Section */
+  .test-section{display:none;margin-top:40px;background:linear-gradient(135deg,#dce8ff,#e6f0ff);padding:30px;border-radius:14px;box-shadow:0 12px 30px rgba(122,162,255,0.2);}
+  .timer{font-weight:bold;text-align:center;font-size:22px;margin-bottom:20px;color:#34495e; animation: pulse 1s infinite alternate;}
+  @keyframes pulse {
+    0%{color:#34495e; transform: scale(1);}
+    50%{color:#5a6ff0; transform: scale(1.05);}
+    100%{color:#34495e; transform: scale(1);}
+  }
+  .sentence-box{margin-bottom:15px;padding:15px;background:#f0f8ff;border-radius:10px;box-shadow:0 4px 12px rgba(122,162,255,0.1);}
+  .sentence-box p{margin-bottom:8px;}
+  .sentence-box input{padding:10px;width:100%;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+  .submit-btn{padding:12px 20px;background:linear-gradient(90deg,#7aa2ff,#6b8cff);color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;transition:0.2s;}
+  .submit-btn:hover{transform:scale(1.05);}
+  .frozen{pointer-events:none;opacity:0.6;}
+  .result{text-align:center;margin-top:20px;font-size:18px;color:green;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrapper">
+    <div class="logo">Typing</div>
+    <nav>
+      <a href="#">Lessons</a>
+      <a href="#">Practice</a>
+      <a href="#">Tests</a>
+      <a href="#">Progress</a>
+    </nav>
+  </div>
+</header>
+
+<div class="main-title"><h1>Institute</h1></div>
+
+<main class="page">
+  <div class="wrapper main-layout">
+
+    <section class="left-content">
+      <h2>Learn Typing From Beginner to Master</h2>
+      <p class="subtitle">Build speed, accuracy, and confidence with lessons and smart practice tools.</p>
+
+      <div class="levels">
+        <div class="level" data-level="Beginner">Beginner
+          <div class="sub-levels">
+            <div class="sub-level" data-sub="Home Row">Home Row</div>
+            <div class="sub-level" data-sub="Top Row">Top Row</div>
+            <div class="sub-level" data-sub="Bottom Row">Bottom Row</div>
+          </div>
+        </div>
+        <div class="level" data-level="Intermediate">Intermediate
+          <div class="sub-levels">
+            <div class="sub-level" data-sub="Speed Drill 1">Speed Drill 1</div>
+            <div class="sub-level" data-sub="Speed Drill 2">Speed Drill 2</div>
+            <div class="sub-level" data-sub="Accuracy Focus">Accuracy Focus</div>
+          </div>
+        </div>
+        <div class="level" data-level="Advanced">Advanced Speed Drills</div>
+        <div class="level" data-level="Master">Master Challenges</div>
+      </div>
+
+      <!-- Typing Test Section -->
+      <div class="test-section" id="testSection">
+        <h2>Typing Test</h2>
+        <div class="timer" id="timer">Time Remaining: 10:00</div>
+        <form id="testForm">
+          <div class="sentence-box">
+            <p>Type this: The quick brown fox jumps over the lazy dog.</p>
+            <input type="text" required placeholder="Type here..."/>
+          </div>
+          <div class="sentence-box">
+            <p>Type this: Practice makes perfect in typing skills.</p>
+            <input type="text" required placeholder="Type here..."/>
+          </div>
+          <div class="sentence-box">
+            <p>Type this: JavaScript makes web pages interactive.</p>
+            <input type="text" required placeholder="Type here..."/>
+          </div>
+          <button type="submit" class="submit-btn">Submit Test</button>
+        </form>
+        <div class="result" id="result"></div>
+      </div>
+    </section>
+
+    <aside class="login-box" id="loginBox">
+      <h2>Welcome Back</h2>
+      <form id="loginForm">
+        <input type="text" placeholder="Username" required/>
+        <input type="password" placeholder="Password" required/>
+        <button type="submit">Login</button>
+      </form>
+      <div class="login-success">Login Successful!</div>
+      <p class="register">New here? <a href="#">Create account</a></p>
+    </aside>
+
+  </div>
+</main>
+
+<script>
+  // Level selection
+  const levels = document.querySelectorAll('.level');
+  const testSection = document.getElementById('testSection');
+  const timerEl = document.getElementById('timer');
+  const testForm = document.getElementById('testForm');
+  const resultEl = document.getElementById('result');
+  let interval;
+
+  function startTimer(totalSeconds){
+    clearInterval(interval);
+    interval = setInterval(()=>{
+      if(totalSeconds <= 0){
+        clearInterval(interval);
+        freezeTest('Time is up! Test frozen.');
+      } else{
+        totalSeconds--;
+        const m = String(Math.floor(totalSeconds/60)).padStart(2,'0');
+        const s = String(totalSeconds%60).padStart(2,'0');
+        timerEl.innerText = `Time Remaining: ${m}:${s}`;
+      }
+    },1000);
+  }
+
+  function freezeTest(message){
+    testForm.classList.add('frozen');
+    resultEl.innerText = message;
+  }
+
+  levels.forEach(level=>{
+    level.addEventListener('click', ()=>{
+      // Start timer only when a level is clicked
+      levels.forEach(l=>l.classList.remove('selected'));
+      level.classList.add('selected');
+      levels.forEach(l=>{
+        const s=l.querySelector('.sub-levels');
+        if(s) s.style.display='none';
+      });
+      const subs = level.querySelector('.sub-levels');
+      if(subs) subs.style.display='flex';
+      localStorage.setItem('selectedLevel', level.dataset.level);
+      startTimer(10*60); // 10 minutes
+      testSection.style.display='block';
+    });
+  });
+
+  const subLevels = document.querySelectorAll('.sub-level');
+  subLevels.forEach(sub=>{
+    sub.addEventListener('click', e=>{
+      e.stopPropagation();
+      localStorage.setItem('selectedSubLevel', sub.dataset.sub);
+      alert(`Sub-Level Selected: ${sub.dataset.sub}`);
+    });
+  });
+
+  // Login form
+  const loginForm = document.getElementById('loginForm');
+  const loginBox = document.getElementById('loginBox');
+  const successMsg = document.querySelector('.login-success');
+
+  loginForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    successMsg.style.display='block';
+    loginBox.style.display='none';
+  });
+
+  testForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    clearInterval(interval);
+    freezeTest('Test submitted successfully!');
+  });
+</script>
+
+</body>
+</html>
